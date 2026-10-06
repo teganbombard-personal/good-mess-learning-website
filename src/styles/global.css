@@ -1,0 +1,31 @@
+body{margin:0;background:#FDFAF6;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;color:#1A1220}
+a{color:#B8246F}
+a:hover{color:#8E1A55}
+*{box-sizing:border-box}
+input,select,textarea,button{font-family:inherit}
+@media (max-width:1180px){[data-sticker]{display:none!important}}
+@keyframes gm-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marquee-track{animation:none!important}}
+
+/* nav */
+.nav-link{color:#1A1220;text-decoration:none;padding:9px 16px;border-radius:999px}
+.nav-link:hover{color:#1A1220;background:var(--hover)}
+.nav-link[aria-current="page"]{background:var(--hover);font-weight:700}
+.nav-cta{background:#1A1220;color:#FDFAF6;text-decoration:none;padding:9px 18px;border-radius:999px;font-weight:700}
+.nav-cta:hover{background:#3E2F50;color:#FDFAF6}
+.foot-link{color:#1A1220;text-decoration:none}
+.foot-link:hover{text-decoration:underline;color:#1A1220}
+
+/* programs filters */
+.chip{border:2px solid #1A1220;background:#fff;color:#1A1220;padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;cursor:pointer}
+.chip:hover{transform:rotate(-2deg)}
+.chip[aria-pressed="true"]{background:#1A1220;color:#FDFAF6}
+
+/* pricing faq */
+.faq summary{list-style:none;cursor:pointer}
+.faq summary::-webkit-details-marker{display:none}
+.faq .faq-sign::before{content:"+"}
+.faq[open] .faq-sign::before{content:"–"}
+
+/* keyboard focus */
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #1A1220;outline-offset:3px}

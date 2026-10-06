@@ -1,0 +1,14 @@
+/* Hover states from the design (style-hover), keyed by data-h. Generated. */
+[data-h]{transition:transform .15s ease,box-shadow .15s ease,background .15s ease}
+[data-h="1"]:hover{background:#C92483;transform:rotate(-2deg) !important}
+[data-h="2"]:hover{background:#FFF8DC;transform:rotate(2deg) !important}
+[data-h="3"]:hover{transform:rotate(0deg) translateY(-4px) !important}
+[data-h="4"]:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #E8359A !important}
+[data-h="5"]:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #FF6B35 !important}
+[data-h="6"]:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #FFD23F !important}
+[data-h="7"]:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 #0BBFB0 !important}
+[data-h="8"]:hover{background:#3E2F50 !important}
+[data-h="9"]:hover{transform:rotate(-2deg) !important}
+[data-h="10"]:hover{background:#C92483 !important}
+[data-h="11"]:hover{transform:translateY(-4px) !important}
+@media (prefers-reduced-motion:reduce){[data-h]{transition:none}}
