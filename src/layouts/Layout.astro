@@ -7,7 +7,7 @@ interface Props {
   description?: string;
   active?: 'about' | 'services' | 'programs' | 'pricing' | 'contact';
 }
-const { title, description = 'Authentic, hands-on learning built on real-life skills. Classes, tutoring, planning, and coaching for every learner. In person in Clermont, FL and virtual anywhere.', active } = Astro.props;
+const { title, description = 'Authentic, hands-on learning built on real-life skills. Classes, tutoring, planning, and coaching for every learner. Offered live in-person and virtually, plus many resources on-demand.', active } = Astro.props;
 
 const links = [
   { key: 'about', href: '/about/', label: 'About', hover: '#FCE8F2' },
@@ -46,7 +46,7 @@ const links = [
       <slot />
 
       <footer style="padding:0 56px 40px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;font-size:15px">
-        <span style="color:#4A3F4E;font-size:14px">© 2026 Good Mess Learning · <a href="mailto:hello@goodmesslearning.com" style="color:#4A3F4E">hello@goodmesslearning.com</a> · Clermont, FL + virtual</span>
+        <span style="color:#4A3F4E;font-size:14px">© 2026 Good Mess Learning · <a href="mailto:tegan@goodmesslearning.com" style="color:#4A3F4E">tegan@goodmesslearning.com</a> · Central Florida</span>
         <div style="display:flex;flex-wrap:wrap;gap:24px">
           <a class="foot-link" href="/about/">About</a>
           <a class="foot-link" href="/services/">Services</a>
