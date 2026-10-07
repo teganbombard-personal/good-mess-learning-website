@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { links } from '../config';
+import { contactLink } from '../config';
 
 type Row = { name: string; note?: string; price?: string; detail?: string };
 const groups: { title: string; color: string; rows: Row[]; inquire?: boolean }[] = [
@@ -57,7 +57,7 @@ const groups: { title: string; color: string; rows: Row[]; inquire?: boolean }[]
 <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA">
 <span>{r.name}{r.note && <span style="color:#7A6D7E;font-size:13px"> · {r.note}</span>}</span>
 {r.price && <strong style="color:#1A1220;white-space:nowrap">{r.price}</strong>}
-{g.inquire && <a class="btn-line" style="padding:8px 16px;font-size:14px" href={links.inquire}>Inquire</a>}
+{g.inquire && <a class="btn-line" style="padding:8px 16px;font-size:14px" href={contactLink({ type: 'inquiry', program: r.name, interest: r.name === 'Workshops' ? 'Workshops for schools & co-ops' : undefined })}>Inquire</a>}
 </div>
 ))}
 </div>
@@ -76,7 +76,7 @@ const groups: { title: string; color: string; rows: Row[]; inquire?: boolean }[]
 <div style="background:#fff;border:3px solid #1A1220;border-radius:28px;box-shadow:10px 10px 0 #0BBFB0;padding:56px;display:flex;flex-direction:column;gap:36px">
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:40px;align-items:start">
 <div style="display:flex;flex-direction:column;gap:14px"><div style="align-self:flex-start;background:#E3FBF8;padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px">New for 2027</div><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:clamp(40px,5vw,52px);line-height:1.04;color:#1A1220;">Scholarships</h2></div>
-<div style="display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.6;color:#4A3F4E"><p style="margin:0">Starting January 1, 2027, educational scholarships will be available to many learners across the U.S. as part of the Educational Choice for Children Act. Join one of our live webinars to learn more.</p><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:6px"><a class="btn-solid" href={links.webinar}>Register for a live webinar</a><span style="font-size:15px;color:#7A6D7E">Date &amp; time coming soon</span></div></div>
+<div style="display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.6;color:#4A3F4E"><p style="margin:0">Starting January 1, 2027, educational scholarships will be available to many learners across the U.S. as part of the Educational Choice for Children Act. Join one of our live webinars to learn more.</p><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:6px"><a class="btn-solid" href={contactLink({ type: 'webinar' })}>Register for a live webinar</a><span style="font-size:15px;color:#7A6D7E">Date &amp; time coming soon</span></div></div>
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px">
 <div style="border-top:4px solid #E8359A;padding-top:18px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Fraunces',serif;font-style:italic;font-weight:800;font-size:28px;color:#1A1220">01</span><h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:21px;color:#1A1220">Check your state</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Your state has to opt in to the program. We’ll keep this page updated for Florida.</p></div>
