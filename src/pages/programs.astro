@@ -1,167 +1,86 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { links } from '../config';
+
+// SAMPLE CONTENT: dates, times, locations, and costs below are placeholders until the real program doc is in.
+type Session = { dates: string; time: string; place: string };
+const colors: Record<string, [string, string]> = {
+  Math: ['#FF6B35', '#FFF1E9'],
+  Science: ['#0BBFB0', '#E3FBF8'],
+  ELA: ['#E8359A', '#FCE8F2'],
+  'Social Studies': ['#FFD23F', '#FFF8DC'],
+  Electives: ['#3E2F50', '#EDE6F0'],
+};
+type Cost = { main: string; total?: string; sub?: string; note?: string };
+// Hourly rate x meeting length x number of weeks = total for the whole session.
+const priced = (rate: number, minutes: number, weeks: number | null, note?: string): Cost => {
+  const per = (rate * minutes) / 60;
+  return weeks
+    ? { main: `$${rate}/hour`, total: `$${per * weeks} total`, sub: `for the full ${weeks}-week session`, note }
+    : { main: `$${rate}/hour`, total: `$${per} per session`, note };
+};
+const supplies = 'supplies included';
+const onDemandCost: Cost = { main: '$50/week with feedback', total: '$50/month without', sub: '' };
+const programs: {
+  title: string; subject: string; format: 'In person' | 'Live online' | 'On-demand'; grades: string[]; desc: string;
+  meeting: string; duration: string; cost: Cost; kind: 'sessions' | 'ondemand' | 'oneToOne'; sessions?: Session[];
+}[] = [
+  { title: 'Kitchen Table Economics', subject: 'Math', format: 'In person', grades: ['3–5'], desc: 'Run a pop-up market from scratch: pricing, budgets, and whether you actually turned a profit.', meeting: '90 minutes', duration: '7 weeks', cost: priced(30, 90, 7, supplies), kind: 'sessions', sessions: [{ dates: '1/11/27 – 2/22/27', time: '10–11:30am', place: 'Northeast Regional Park' }] },
+  { title: 'Build It: Bridges & Towers', subject: 'Science', format: 'In person', grades: ['3–5', '6–8'], desc: 'Design, build, load-test, and rebuild. Forces and materials, learned by breaking things.', meeting: '90 minutes', duration: '6 weeks', cost: priced(30, 90, 6, supplies), kind: 'sessions', sessions: [{ dates: '1/14/27 – 2/18/27', time: '1–2:30pm', place: 'Location TBD' }] },
+  { title: 'Lake County Field Guide', subject: 'Science', format: 'In person', grades: ['K–2'], desc: 'Explore local parks, sketch what we find, and make a field guide to share with families.', meeting: '90 minutes', duration: '6 weeks', cost: priced(30, 90, 6, supplies), kind: 'sessions', sessions: [{ dates: '1/15/27 – 2/19/27', time: '9–10:30am', place: 'Location TBD' }] },
+  { title: 'Phonics Through Play', subject: 'ELA', format: 'In person', grades: ['K–2'], desc: 'Hands-on games, building, and movement for early readers in a small group.', meeting: '60 minutes', duration: 'Ongoing', cost: priced(30, 60, null, supplies), kind: 'sessions', sessions: [{ dates: 'Mondays, starting 1/11/27', time: '9–10am', place: 'Location TBD' }, { dates: 'Wednesdays, starting 1/13/27', time: '9–10am', place: 'Location TBD' }] },
+  { title: 'Writing Workshop', subject: 'ELA', format: 'Live online', grades: ['3–5', '6–8'], desc: 'Write for real audiences: letters, reviews, how-to guides, and a published final piece.', meeting: '60 minutes', duration: '10 weeks', cost: priced(15, 60, 10), kind: 'sessions', sessions: [{ dates: '1/13/27 – 3/17/27', time: '2–3pm', place: 'Live online' }] },
+  { title: 'Literature-Based Book Club', subject: 'ELA', format: 'Live online', grades: ['6–8'], desc: 'Discussion-driven, learner-chosen titles, with projects that grow out of the reading.', meeting: '60 minutes', duration: 'Ongoing', cost: priced(15, 60, null), kind: 'sessions', sessions: [{ dates: 'Every other Monday, starting 1/11/27', time: '3–4pm', place: 'Live online' }] },
+  { title: 'Creative Writing Sessions', subject: 'ELA', format: 'Live online', grades: ['9–12'], desc: 'Fiction, poetry, and personal essay with real feedback and a portfolio by the end.', meeting: '60 minutes', duration: '8 weeks', cost: priced(15, 60, 8), kind: 'sessions', sessions: [{ dates: '1/12/27 – 3/2/27', time: '4–5pm', place: 'Live online' }] },
+  { title: 'Mapmakers: Geography by Road Trip', subject: 'Social Studies', format: 'On-demand', grades: ['3–5'], desc: 'Plan a cross-country trip on a budget: routes, regions, history, and mileage math.', meeting: 'Work at your own pace', duration: 'Start anytime', cost: onDemandCost, kind: 'ondemand' },
+  { title: 'Civics in Action: Run a Campaign', subject: 'Social Studies', format: 'In person', grades: ['6–8'], desc: 'Pick a local issue, research it, build a campaign, and pitch it to a real audience.', meeting: '90 minutes', duration: '8 weeks', cost: priced(30, 90, 8, supplies), kind: 'sessions', sessions: [{ dates: '1/14/27 – 3/4/27', time: '10–11:30am', place: 'Location TBD' }] },
+  { title: 'Start a Business: PBL Unit', subject: 'Electives', format: 'On-demand', grades: ['6–8', '9–12'], desc: 'An interdisciplinary unit that takes a business idea from plan to pitch.', meeting: 'Work at your own pace', duration: 'Start anytime', cost: onDemandCost, kind: 'ondemand' },
+  { title: 'Study Skills Coaching', subject: 'Electives', format: 'Live online', grades: ['6–8', '9–12'], desc: 'Planning, note-taking, and time management, coached around your learner’s actual coursework.', meeting: '60 minutes', duration: 'Flexible', cost: { main: '$70–$110/hour, by grade' }, kind: 'oneToOne' },
+  { title: 'Young Makers Club', subject: 'Electives', format: 'In person', grades: ['K–2', '3–5'], desc: 'A themed enrichment club with a new build every month. Great for after school.', meeting: '90 minutes', duration: 'Monthly themes', cost: priced(30, 90, null, supplies), kind: 'sessions', sessions: [{ dates: 'Fridays, starting 1/15/27', time: '3:30–5pm', place: 'Location TBD' }] },
+];
 ---
 <Layout title="Programs | Good Mess Learning" active="programs">
 <header style="position:relative;padding:56px 56px 88px;display:flex;flex-direction:column;gap:22px">
 <div data-sticker="true" style="position:absolute;right:80px;top:56px;transform:rotate(8deg);background:#0BBFB0;color:#1A1220;padding:12px 20px;border-radius:14px;font-family:'Fraunces',serif;font-weight:800;font-size:20px">now enrolling</div><div data-sticker="true" style="position:absolute;right:250px;top:150px;transform:rotate(-12deg);background:#FFD23F;color:#1A1220;width:124px;height:124px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Fraunces',serif;font-weight:800;font-size:19px;line-height:1.05">spring<br>2027</div>
 <div style="position:relative;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#B8246F">Programs</div>
 <h1 style="position:relative;margin:0;max-width:820px;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:900;font-size:clamp(52px,7vw,92px);line-height:.96;letter-spacing:-.03em;color:#1A1220;text-wrap:balance">Find your next <em style="color:#E8359A">good mess.</em></h1>
-<p style="position:relative;margin:0;max-width:620px;font-size:20px;line-height:1.6;color:#4A3F4E;text-wrap:pretty">Classes, clubs, and units open for sign-up. Filter by grade, subject, or format.</p>
+<p style="position:relative;margin:0;max-width:620px;font-size:20px;line-height:1.6;color:#4A3F4E;text-wrap:pretty">Classes, clubs, and units. Filter by grade, subject, or format.</p>
 </header><section style="padding:0 56px 32px">
 <div style="background:#fff;border-radius:24px;box-shadow:0 10px 30px rgba(26,18,32,.08);padding:24px 28px;display:flex;flex-direction:column;gap:14px">
-<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span style="width:72px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A3F4E">Grade</span><button type="button" class="chip" data-filter="grade" data-value="All" aria-pressed="true">All</button><button type="button" class="chip" data-filter="grade" data-value="K–2" aria-pressed="false">K–2</button><button type="button" class="chip" data-filter="grade" data-value="3–5" aria-pressed="false">3–5</button><button type="button" class="chip" data-filter="grade" data-value="6–8" aria-pressed="false">6–8</button><button type="button" class="chip" data-filter="grade" data-value="9–12" aria-pressed="false">9–12</button></div><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span style="width:72px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A3F4E">Subject</span><button type="button" class="chip" data-filter="subject" data-value="All" aria-pressed="true">All</button><button type="button" class="chip" data-filter="subject" data-value="Math" aria-pressed="false">Math</button><button type="button" class="chip" data-filter="subject" data-value="Science" aria-pressed="false">Science</button><button type="button" class="chip" data-filter="subject" data-value="ELA" aria-pressed="false">ELA</button><button type="button" class="chip" data-filter="subject" data-value="Social Studies" aria-pressed="false">Social Studies</button><button type="button" class="chip" data-filter="subject" data-value="Electives" aria-pressed="false">Electives</button></div><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span style="width:72px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A3F4E">Format</span><button type="button" class="chip" data-filter="format" data-value="All" aria-pressed="true">All</button><button type="button" class="chip" data-filter="format" data-value="In person" aria-pressed="false">In person</button><button type="button" class="chip" data-filter="format" data-value="Live online" aria-pressed="false">Live online</button><button type="button" class="chip" data-filter="format" data-value="Self-paced" aria-pressed="false">Self-paced</button></div>
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span style="width:72px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A3F4E">Grade</span><button type="button" class="chip" data-filter="grade" data-value="All" aria-pressed="true">All</button><button type="button" class="chip" data-filter="grade" data-value="K–2" aria-pressed="false">K–2</button><button type="button" class="chip" data-filter="grade" data-value="3–5" aria-pressed="false">3–5</button><button type="button" class="chip" data-filter="grade" data-value="6–8" aria-pressed="false">6–8</button><button type="button" class="chip" data-filter="grade" data-value="9–12" aria-pressed="false">9–12</button></div><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span style="width:72px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A3F4E">Subject</span><button type="button" class="chip" data-filter="subject" data-value="All" aria-pressed="true">All</button><button type="button" class="chip" data-filter="subject" data-value="Math" aria-pressed="false">Math</button><button type="button" class="chip" data-filter="subject" data-value="Science" aria-pressed="false">Science</button><button type="button" class="chip" data-filter="subject" data-value="ELA" aria-pressed="false">ELA</button><button type="button" class="chip" data-filter="subject" data-value="Social Studies" aria-pressed="false">Social Studies</button><button type="button" class="chip" data-filter="subject" data-value="Electives" aria-pressed="false">Electives</button></div><div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px"><span style="width:72px;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A3F4E">Format</span><button type="button" class="chip" data-filter="format" data-value="All" aria-pressed="true">All</button><button type="button" class="chip" data-filter="format" data-value="In person" aria-pressed="false">In person</button><button type="button" class="chip" data-filter="format" data-value="Live online" aria-pressed="false">Live online</button><button type="button" class="chip" data-filter="format" data-value="On-demand" aria-pressed="false">On-demand</button></div>
 </div>
 </section>
 <section style="padding:16px 56px 112px;display:flex;flex-direction:column;gap:28px">
 <div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px"><span id="count" aria-live="polite" style="font-weight:700;font-size:15px"></span><button type="button" id="reset" style="background:none;border:none;color:#B8246F;font-weight:700;font-size:15px;cursor:pointer;padding:0">Clear filters</button></div>
 
-<div id="grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:28px;align-items:stretch">
-
-<article data-program data-grades="3–5" data-subject="Math" data-format="In person" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #FF6B35;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FFF1E9;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Math</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">In person</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 3–5</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Kitchen Table Economics</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Run a pop-up market from scratch: pricing, budgets, and whether you actually turned a profit.</p>
-<div style="font-size:14px;color:#4A3F4E">Tuesdays 10–11:30 · 8 weeks · Clermont</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$30 / hour</strong><span style="font-size:13px;color:#7A6D7E">4 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
+<div id="grid" style="display:grid;grid-template-columns:1fr;gap:28px;align-items:stretch">
+{programs.map((p) => (
+<article data-program data-grades={p.grades.join('|')} data-subject={p.subject} data-format={p.format} style={`background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid ${colors[p.subject][0]};padding:26px 24px;display:flex;flex-direction:column;gap:14px;height:100%`} data-h="11">
+<div style="display:flex;flex-wrap:wrap;gap:8px"><span style={`background:${colors[p.subject][1]};padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px`}>{p.subject}</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">{p.format}</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades {p.grades.join(', ')}</span></div>
+<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">{p.title}</h3>
+<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">{p.desc}</p>
+<dl style="margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px 24px;font-size:15px;color:#1A1220">
+<div><dt style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7A6D7E">Meeting</dt><dd style="margin:2px 0 0;font-weight:700">{p.meeting}</dd></div>
+<div><dt style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7A6D7E">Session</dt><dd style="margin:2px 0 0;font-weight:700">{p.duration}</dd></div>
+<div><dt style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7A6D7E">Cost</dt><dd style="margin:2px 0 0;font-weight:700">{p.cost.main}{p.cost.total && <> · <span style="color:#B8246F">{p.cost.total}</span>{p.cost.sub ? ` ${p.cost.sub}` : ''}</>}{p.cost.note && <span style="display:block;font-weight:400;font-size:14px;color:#4A3F4E">{p.cost.note}</span>}</dd></div>
+</dl>
+<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;flex-direction:column;gap:10px">
+{p.kind === 'sessions' && <div class="sessions">{p.sessions!.map((x) => (
+<a class="session" href={links.waitlist}>
+<span style="display:flex;flex-direction:column;gap:2px"><strong style="font-size:16px">{x.dates}</strong><span style="font-size:14px;color:#4A3F4E">{x.time}</span><span style="font-size:14px;color:#4A3F4E">{x.place}</span></span>
+<span class="s-cta">Join the waitlist →</span>
+</a>
+))}</div>}
+{p.kind === 'ondemand' && (
+<div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn-solid" href={links.signupWithFeedback}>Sign up with feedback</a><a class="btn-line" href={links.signupWithoutFeedback}>Sign up without feedback</a></div>
+)}
+{p.kind === 'oneToOne' && (
+<div><a class="btn-solid" href={links.requestTime}>Request a time</a></div>
+)}
 </div>
 </article>
-
-
-<article data-program data-grades="3–5|6–8" data-subject="Science" data-format="In person" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #0BBFB0;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#E3FBF8;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Science</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">In person</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 3–5, 6–8</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Build It: Bridges &amp; Towers</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Design, build, load-test, and rebuild. Forces and materials, learned by breaking things.</p>
-<div style="font-size:14px;color:#4A3F4E">Thursdays 1–2:30 · 6 weeks · Clermont</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$30 / hour</strong><span style="font-size:13px;color:#7A6D7E">6 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
+))}
 </div>
-</article>
-
-
-<article data-program data-grades="K–2" data-subject="Science" data-format="In person" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #0BBFB0;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#E3FBF8;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Science</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">In person</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades K–2</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Lake County Field Guide</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Explore local parks, sketch what we find, and make a field guide to share with families.</p>
-<div style="font-size:14px;color:#4A3F4E">Fridays 9–10:30 · 6 weeks · outdoors</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$30 / hour</strong><span style="font-size:13px;color:#7A6D7E">3 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="K–2" data-subject="ELA" data-format="In person" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #E8359A;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FCE8F2;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">ELA</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">In person</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades K–2</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Phonics Through Play</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Hands-on games, building, and movement for early readers in a small group.</p>
-<div style="font-size:14px;color:#4A3F4E">Mon & Wed 9–10 · ongoing</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$30 / hour</strong><span style="font-size:13px;color:#7A6D7E">5 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="3–5|6–8" data-subject="ELA" data-format="Live online" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #E8359A;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FCE8F2;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">ELA</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Live online</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 3–5, 6–8</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Writing Workshop</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Write for real audiences: letters, reviews, how-to guides, and a published final piece.</p>
-<div style="font-size:14px;color:#4A3F4E">Wednesdays 2–3 · 10 weeks</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$30 / session</strong><span style="font-size:13px;color:#7A6D7E">7 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="6–8" data-subject="ELA" data-format="Live online" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #E8359A;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FCE8F2;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">ELA</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Live online</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 6–8</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Literature-Based Book Club</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Discussion-driven, learner-chosen titles, with projects that grow out of the reading.</p>
-<div style="font-size:14px;color:#4A3F4E">Every other Monday 3–4</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$25 / session</strong><span style="font-size:13px;color:#7A6D7E">8 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="9–12" data-subject="ELA" data-format="Live online" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #E8359A;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FCE8F2;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">ELA</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Live online</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 9–12</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Creative Writing Sessions</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Fiction, poetry, and personal essay with real feedback and a portfolio by the end.</p>
-<div style="font-size:14px;color:#4A3F4E">Tuesdays 4–5 · 8 weeks</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$35 / session</strong><span style="font-size:13px;color:#7A6D7E">5 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="3–5" data-subject="Social Studies" data-format="Self-paced" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #FFD23F;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FFF8DC;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Social Studies</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Self-paced</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 3–5</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Mapmakers: Geography by Road Trip</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Plan a cross-country trip on a budget: routes, regions, history, and mileage math.</p>
-<div style="font-size:14px;color:#4A3F4E">Start anytime · Google Classroom</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$150 / program</strong><span style="font-size:13px;color:#7A6D7E">Open enrollment</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="6–8" data-subject="Social Studies" data-format="In person" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #FFD23F;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#FFF8DC;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Social Studies</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">In person</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 6–8</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Civics in Action: Run a Campaign</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Pick a local issue, research it, build a campaign, and pitch it to a real audience.</p>
-<div style="font-size:14px;color:#4A3F4E">Thursdays 10–11:30 · 8 weeks · Clermont</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$30 / hour</strong><span style="font-size:13px;color:#7A6D7E">6 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="6–8|9–12" data-subject="Electives" data-format="Self-paced" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #3E2F50;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#EDE6F0;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Electives</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Self-paced</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 6–8, 9–12</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Start a Business: PBL Unit</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">An interdisciplinary unit that takes a business idea from plan to pitch.</p>
-<div style="font-size:14px;color:#4A3F4E">Start anytime · Google Classroom</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$150 / program</strong><span style="font-size:13px;color:#7A6D7E">Open enrollment</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="6–8|9–12" data-subject="Electives" data-format="Live online" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #3E2F50;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#EDE6F0;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Electives</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Live online</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades 6–8, 9–12</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Study Skills Coaching</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Planning, note-taking, and time management, coached around your learner’s actual coursework.</p>
-<div style="font-size:14px;color:#4A3F4E">Flexible · 1:1 scheduling</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$60 / hour</strong><span style="font-size:13px;color:#7A6D7E">Booking now</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-
-<article data-program data-grades="K–2|3–5" data-subject="Electives" data-format="In person" style="background:#fff;box-shadow:0 10px 30px rgba(26,18,32,.10);border-top:10px solid #3E2F50;padding:26px 24px;display:flex;flex-direction:column;gap:12px;height:100%" data-h="11">
-<div style="display:flex;flex-wrap:wrap;gap:8px"><span style="background:#EDE6F0;padding:5px 11px;border-radius:999px;font-weight:700;font-size:12px">Electives</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">In person</span><span style="background:#F3EEF1;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12px">Grades K–2, 3–5</span></div>
-<h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:24px;line-height:1.15;color:#1A1220">Young Makers Club</h3>
-<p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">A themed enrichment club with a new build every month. Great for after school.</p>
-<div style="font-size:14px;color:#4A3F4E">Fridays 3:30–5 · monthly themes</div>
-<div style="margin-top:auto;padding-top:14px;border-top:1px dashed #CFC3CC;display:flex;justify-content:space-between;align-items:center;gap:12px">
-<div style="display:flex;flex-direction:column"><strong style="font-size:17px;color:#1A1220">$20 / hour</strong><span style="font-size:13px;color:#7A6D7E">9 spots left</span></div>
-<a href="/contact/" style="background:#E8359A;color:#FDFAF6;text-decoration:none;padding:11px 20px;border-radius:999px;font-weight:700;font-size:15px" data-h="10">Sign up</a>
-</div>
-</article>
-
-</div>
-
 
 <div id="none" hidden style="background:#fff;border:3px dashed #CFC3CC;border-radius:24px;padding:56px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center"><h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:26px">Nothing here yet.</h3><p style="margin:0;color:#4A3F4E;max-width:460px">Try another filter, or tell us what you're looking for. New programs open every season, and many start from a family's request.</p><a href="/contact/" style="font-weight:700">Request a program →</a></div>
 
@@ -193,7 +112,7 @@ import Layout from '../layouts/Layout.astro';
       });
       chips.forEach(function (b) { b.setAttribute('aria-pressed', state[b.dataset.filter] === b.dataset.value ? 'true' : 'false'); });
       count.textContent = n + (n === 1 ? ' program' : ' programs');
-      grid.style.display = n ? '' : 'none';
+      grid.style.display = n ? 'grid' : 'none';
       none.style.display = n ? 'none' : 'flex';
     }
     chips.forEach(function (b) { b.addEventListener('click', function () { state[b.dataset.filter] = b.dataset.value; apply(); }); });

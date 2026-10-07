@@ -1,5 +1,37 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { links } from '../config';
+
+type Row = { name: string; note?: string; price?: string; detail?: string };
+const groups: { title: string; color: string; rows: Row[]; inquire?: boolean }[] = [
+  { title: 'Private tutoring', color: '#E8359A', rows: [
+    { name: 'Elementary', price: '$70 / hour' },
+    { name: 'Middle school', price: '$90 / hour' },
+    { name: 'High school', price: '$110 / hour' },
+  ] },
+  { title: 'Small group classes', color: '#FF6B35', rows: [
+    { name: 'In person', note: 'supplies included', price: '$30 / hour' },
+    { name: 'Virtual', note: 'supplies not included', price: '$15 / hour' },
+  ] },
+  { title: 'Planning & coaching', color: '#FFD23F', rows: [
+    { name: '1:1 Curriculum Consult', price: '$65' },
+    { name: 'New Family Onboarding', price: '$85' },
+    { name: 'Annual Kickoff Session', price: '$95' },
+    { name: 'Monthly Planning', price: '$150 / month' },
+    { name: 'Multi-Child Monthly Planning', note: '2+ children', price: '$200 / month' },
+    { name: 'Full-Year Roadmap', price: '$750 / year' },
+  ] },
+  { title: 'On-demand', color: '#0BBFB0', rows: [
+    { name: 'On-demand with feedback', price: '$50 / week' },
+    { name: 'On-demand without feedback', price: '$50 / month' },
+    { name: 'Monthly on-demand with feedback', price: '$150 / month' },
+  ] },
+  { title: 'Additional services', color: '#3E2F50', inquire: true, rows: [
+    { name: 'Workshops' },
+    { name: 'Family packages' },
+    { name: 'Custom' },
+  ] },
+];
 ---
 <Layout title="Pricing & Funding | Good Mess Learning" active="pricing">
 <header style="position:relative;padding:56px 56px 88px;display:flex;flex-direction:column;gap:22px">
@@ -17,11 +49,20 @@ import Layout from '../layouts/Layout.astro';
 <section id="prices" style="padding:0 56px 112px;display:flex;flex-direction:column;gap:40px;scroll-margin-top:24px">
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px"><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:clamp(40px,5vw,52px);line-height:1.04;color:#1A1220;">Packages &amp; prices</h2><p style="margin:0;max-width:420px;font-size:16px;line-height:1.6;color:#4A3F4E">Most families start with one service and add as they go. Every price below is ESA eligible.</p></div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:28px;align-items:start">
-<div style="background:#fff;padding:28px;box-shadow:0 10px 30px rgba(26,18,32,.08);border-top:10px solid #E8359A;display:flex;flex-direction:column;gap:6px"><h3 style="margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:#1A1220">Private tutoring</h3><div style="font-size:15px;color:#4A3F4E"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Reading &amp; Phonics</span><strong style="color:#1A1220;white-space:nowrap">$70 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>ELA &amp; Writing</span><strong style="color:#1A1220;white-space:nowrap">$70 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Math</span><strong style="color:#1A1220;white-space:nowrap">$70 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Science</span><strong style="color:#1A1220;white-space:nowrap">$65 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>History &amp; Social Studies</span><strong style="color:#1A1220;white-space:nowrap">$65 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Geography</span><strong style="color:#1A1220;white-space:nowrap">$65 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Multi-Subject Integrated</span><strong style="color:#1A1220;white-space:nowrap">$75 / hr</strong></div></div></div>
-<div style="background:#fff;padding:28px;box-shadow:0 10px 30px rgba(26,18,32,.08);border-top:10px solid #FF6B35;display:flex;flex-direction:column;gap:6px"><h3 style="margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:#1A1220">Small groups (3–8 learners)</h3><div style="font-size:15px;color:#4A3F4E"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Reading, ELA, Math, Science, History</span><strong style="color:#1A1220;white-space:nowrap">$30 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Literature-Based Book Club</span><strong style="color:#1A1220;white-space:nowrap">$25 / session</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Writing Workshop <span style="color:#7A6D7E;font-size:13px">grades 3–8</span></span><strong style="color:#1A1220;white-space:nowrap">$30 / session</strong></div></div></div>
-<div style="background:#fff;padding:28px;box-shadow:0 10px 30px rgba(26,18,32,.08);border-top:10px solid #FFD23F;display:flex;flex-direction:column;gap:6px"><h3 style="margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:#1A1220">Planning &amp; coaching</h3><div style="font-size:15px;color:#4A3F4E"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Full-Year K–8 Roadmap</span><strong style="color:#1A1220;white-space:nowrap">$750 / yr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Monthly K–8 Planning</span><strong style="color:#1A1220;white-space:nowrap">$150 / mo</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Multi-Child Monthly Planning <span style="color:#7A6D7E;font-size:13px">2+ children</span></span><strong style="color:#1A1220;white-space:nowrap">$200 / mo</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Annual Kickoff Session</span><strong style="color:#1A1220;white-space:nowrap">$95</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>New Family Onboarding</span><strong style="color:#1A1220;white-space:nowrap">$85</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>1:1 Curriculum Consult</span><strong style="color:#1A1220;white-space:nowrap">$65</strong></div></div></div>
-<div style="background:#fff;padding:28px;box-shadow:0 10px 30px rgba(26,18,32,.08);border-top:10px solid #0BBFB0;display:flex;flex-direction:column;gap:6px"><h3 style="margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:#1A1220">Lesson plans (you teach)</h3><div style="font-size:15px;color:#4A3F4E"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Weekly Reading / ELA</span><strong style="color:#1A1220;white-space:nowrap">$55 / wk</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Weekly Math, Science, or History</span><strong style="color:#1A1220;white-space:nowrap">$50 / wk</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Monthly Full-Core Plans <span style="color:#7A6D7E;font-size:13px">2 children</span></span><strong style="color:#1A1220;white-space:nowrap">$300 / mo</strong></div></div></div>
-<div style="background:#fff;padding:28px;box-shadow:0 10px 30px rgba(26,18,32,.08);border-top:10px solid #3E2F50;display:flex;flex-direction:column;gap:6px"><h3 style="margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:#1A1220">Electives &amp; enrichment</h3><div style="font-size:15px;color:#4A3F4E"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Interdisciplinary PBL Unit</span><strong style="color:#1A1220;white-space:nowrap">$150 / program</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Guided Literature Study</span><strong style="color:#1A1220;white-space:nowrap">$30 / session</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Creative Writing Sessions</span><strong style="color:#1A1220;white-space:nowrap">$35 / session</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Study Skills Coaching</span><strong style="color:#1A1220;white-space:nowrap">$60 / hr</strong></div><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA"><span>Themed Enrichment Club</span><strong style="color:#1A1220;white-space:nowrap">$20 / hr</strong></div></div></div>
+{groups.map((g) => (
+<div style={`background:#fff;padding:28px;box-shadow:0 10px 30px rgba(26,18,32,.08);border-top:10px solid ${g.color};display:flex;flex-direction:column;gap:6px`}>
+<h3 style="margin:0 0 6px;font-family:'Fraunces',serif;font-weight:700;font-size:23px;color:#1A1220">{g.title}</h3>
+<div style="font-size:15px;color:#4A3F4E">
+{g.rows.map((r) => (
+<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid #EDE3EA">
+<span>{r.name}{r.note && <span style="color:#7A6D7E;font-size:13px"> · {r.note}</span>}</span>
+{r.price && <strong style="color:#1A1220;white-space:nowrap">{r.price}</strong>}
+{g.inquire && <a class="btn-line" style="padding:8px 16px;font-size:14px" href={links.inquire}>Inquire</a>}
+</div>
+))}
+</div>
+</div>
+))}
 </div>
 </section>
 <div id="esa" style="scroll-margin-top:24px"><section style="background:#3E2F50;padding:96px 56px;display:flex;flex-direction:column;gap:40px;position:relative;overflow:hidden"><div style="position:absolute;right:-160px;top:-160px;width:480px;height:480px;border-radius:50%;background:#652F63"></div><div style="position:relative;display:flex;flex-direction:column;gap:40px"><div style="display:flex;flex-direction:column;gap:14px;max-width:720px"><div style="font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#FFD23F">Florida families</div><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:clamp(40px,5vw,52px);line-height:1.04;color:#1A1220;color:#FDFAF6">Paying with your ESA</h2><p style="margin:0;font-size:18px;line-height:1.6;color:#E9E2EC">Good Mess Learning is an approved provider for FES-UA and PEP scholarships through Step Up for Students. Funds go straight from your account to us, with no reimbursement wait.</p></div>
@@ -35,7 +76,7 @@ import Layout from '../layouts/Layout.astro';
 <div style="background:#fff;border:3px solid #1A1220;border-radius:28px;box-shadow:10px 10px 0 #0BBFB0;padding:56px;display:flex;flex-direction:column;gap:36px">
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:40px;align-items:start">
 <div style="display:flex;flex-direction:column;gap:14px"><div style="align-self:flex-start;background:#E3FBF8;padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px">New for 2027</div><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:clamp(40px,5vw,52px);line-height:1.04;color:#1A1220;">Scholarships</h2></div>
-<div style="display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.6;color:#4A3F4E"><p style="margin:0">Starting January 1, 2027, a new federal program sends more money to Scholarship Granting Organizations (SGOs). SGOs are nonprofits that award K–12 scholarships to families.</p><p style="margin:0">In participating states, those scholarships can cover education services like tutoring, so they can work for homeschool, public, and private school families.</p></div>
+<div style="display:flex;flex-direction:column;gap:14px;font-size:17px;line-height:1.6;color:#4A3F4E"><p style="margin:0">Starting January 1, 2027, educational scholarships will be available to many learners across the U.S. as part of the Educational Choice for Children Act. Join one of our live webinars to learn more.</p><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:6px"><a class="btn-solid" href={links.webinar}>Register for a live webinar</a><span style="font-size:15px;color:#7A6D7E">Date &amp; time coming soon</span></div></div>
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px">
 <div style="border-top:4px solid #E8359A;padding-top:18px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Fraunces',serif;font-style:italic;font-weight:800;font-size:28px;color:#1A1220">01</span><h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:21px;color:#1A1220">Check your state</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Your state has to opt in to the program. We’ll keep this page updated for Florida.</p></div>
@@ -65,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
 </details>
 <details class="faq" style="border-bottom:2px solid #1A1220">
 <summary style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;color:#1A1220"><span style="font-family:'Fraunces',serif;font-weight:700;font-size:21px">Do you offer pricing for multiple kids?</span><span class="faq-sign" aria-hidden="true" style="flex:none;width:32px;height:32px;border-radius:50%;background:#FFF8DC;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px"></span></summary>
-<p style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#4A3F4E;max-width:640px">Yes. Multi-child monthly planning is $200/month for 2+ children, and full-core monthly plans for two children are $300/month.</p>
+<p style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#4A3F4E;max-width:640px">Yes, family pricing is available upon request for multiple children. Please reach out to request this.</p>
 </details>
 <details class="faq" style="border-bottom:2px solid #1A1220">
 <summary style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;color:#1A1220"><span style="font-family:'Fraunces',serif;font-weight:700;font-size:21px">Is the intro call really free?</span><span class="faq-sign" aria-hidden="true" style="flex:none;width:32px;height:32px;border-radius:50%;background:#E3FBF8;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px"></span></summary>
@@ -73,7 +114,7 @@ import Layout from '../layouts/Layout.astro';
 </details>
 <details class="faq" style="border-bottom:2px solid #1A1220">
 <summary style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;color:#1A1220"><span style="font-family:'Fraunces',serif;font-weight:700;font-size:21px">What’s your cancellation policy?</span><span class="faq-sign" aria-hidden="true" style="flex:none;width:32px;height:32px;border-radius:50%;background:#FCE8F2;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px"></span></summary>
-<p style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#4A3F4E;max-width:640px">[Placeholder: add your cancellation and rescheduling policy here.]</p>
+<div style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#4A3F4E;max-width:640px;display:flex;flex-direction:column;gap:10px"><p style="margin:0">Completed services and on-demand services are not refundable.</p><p style="margin:0">For live and virtual sessions:</p><ul style="margin:0;padding-left:22px;display:flex;flex-direction:column;gap:4px"><li>Fully refundable up to 1 week before a session begins</li><li>50% refundable up to 3 days before a session begins</li><li>25% refundable up to 2 days before a session begins</li><li>Not refundable less than 2 days before a session begins</li></ul></div>
 </details>
 </div>
 </section>
