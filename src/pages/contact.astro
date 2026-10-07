@@ -11,7 +11,9 @@ import { hubspot } from '../config';
 </header><section style="padding:0 56px 96px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:40px;align-items:start">
 <div style="background:#fff;border:3px solid #1A1220;border-radius:24px;box-shadow:8px 8px 0 #E8359A;padding:32px;display:flex;flex-direction:column;gap:20px">
 <div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:32px;color:#1A1220">Book an intro call</h2><p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Pick a time that works. We'll talk about your learner, your schooling setup, and what kind of support fits.</p></div>
-<div style="min-height:460px;border:2px dashed #CFC3CC;border-radius:16px;background:repeating-linear-gradient(135deg,#FCE8F2 0 12px,#fff 12px 24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:24px"><span style="font:12px ui-monospace,Menlo,monospace;color:#7A6D7E">scheduler embed</span><span style="font-size:14px;color:#4A3F4E;max-width:280px">Calendly, Acuity, or TidyCal inline widget goes here</span></div>
+<div class="meetings-iframe-container" data-src="https://meetings-na2.hubspot.com/tegan-bombard?embed=true" style="min-height:460px"></div>
+<script is:inline type="text/javascript" src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"></script>
+<p style="margin:0;font-size:14px;color:#4A3F4E">Calendar not loading? <a href="https://meetings-na2.hubspot.com/tegan-bombard" target="_blank" rel="noopener">Open it in a new tab →</a></p>
 </div>
 <div style="background:#fff;border-radius:24px;box-shadow:0 10px 30px rgba(26,18,32,.08);padding:32px;display:flex;flex-direction:column;gap:20px">
 
@@ -21,6 +23,7 @@ import { hubspot } from '../config';
 <input type="hidden" name="request_type" value="">
 <input type="hidden" name="program" value="">
 <input type="hidden" name="session" value="">
+<input type="hidden" name="hubspot_status" value="">
 <div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:32px;color:#1A1220">Send a message</h2></div>
 <p id="context" hidden style="margin:0;background:#FFF8DC;border-radius:12px;padding:12px 16px;font-weight:700;font-size:15px;color:#1A1220"></p>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px"><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">First name<input name="firstname" autocomplete="given-name" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Last name<input name="lastname" autocomplete="family-name" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label></div>
@@ -98,17 +101,27 @@ import { hubspot } from '../config';
       var context = { pageUri: location.href, pageName: document.title };
       if (hutk) context.hutk = hutk;
 
+      // HubSpot first, so the Netlify backup copy can record whether it worked.
       var toHubspot = fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + form.dataset.hsPortal + '/' + form.dataset.hsForm, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fields: fields, context: context })
-      }).then(function (r) { if (!r.ok) throw new Error('hubspot ' + r.status); });
+      }).then(function (r) {
+        if (r.ok) { form.elements.hubspot_status.value = 'ok'; return; }
+        return r.text().then(function (t) { throw new Error('hubspot ' + r.status + ' ' + t.slice(0, 300)); });
+      }).catch(function (e) {
+        form.elements.hubspot_status.value = 'failed: ' + (e && e.message ? e.message : e);
+        console.error('HubSpot submit failed', e);
+        throw e;
+      });
 
       // Netlify Forms keeps a backup copy of every submission.
-      var toNetlify = fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString()
+      var toNetlify = toHubspot.catch(function () {}).then(function () {
+        return fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(new FormData(form)).toString()
+        });
       }).then(function (r) { if (!r.ok) throw new Error('netlify ' + r.status); });
 
       Promise.allSettled([toHubspot, toNetlify]).then(function (res) {
