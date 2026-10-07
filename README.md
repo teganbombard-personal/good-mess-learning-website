@@ -1,18 +1,18 @@
 # Good Mess Learning Website
 
-Multi-page marketing site for Good Mess Learning. Plain HTML/CSS, no build step, open any .html file directly in a browser to preview.
+Astro site, deployed on Netlify.
 
-## Pages
-- index.html - Home
-- programs.html - In-person & virtual classes, pricing
-- coaching.html - Choice Navigator coaching & planning sessions
-- about.html - Philosophy
-- contact.html - Contact form (not yet wired to send anywhere, see note in the file)
+## Develop
+- `npm install`
+- `npm run dev` (http://localhost:4321)
+- `npm run build` (outputs to `dist/`)
 
 ## Structure
-- css/style.css - all styling, including brand colors/fonts as CSS variables at the top
-- js/ - reserved for future interactivity
-- images/ - reserved for photos/logo
+- `src/layouts/Layout.astro` - shared head, nav, and footer
+- `src/pages/` - index, about, services, programs, pricing, contact, thanks
+- `src/styles/` - global.css, and hover.css (hover states from the design)
+- `public/images/` - logos and images
 
-## Deploying
-This site is built to deploy via GitHub Pages: Settings > Pages > deploy from main branch, root folder.
+## Notes
+- Contact form uses Netlify Forms (`data-netlify`); submissions appear in the Netlify dashboard once deployed.
+- Programs list lives in `src/pages/programs.astro`; filtering is a small inline script.
