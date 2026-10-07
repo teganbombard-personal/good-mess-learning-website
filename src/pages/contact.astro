@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { hubspot } from '../config';
 ---
 <Layout title="Contact | Good Mess Learning" active="contact">
 <header style="position:relative;padding:56px 56px 88px;display:flex;flex-direction:column;gap:22px">
@@ -14,16 +15,20 @@ import Layout from '../layouts/Layout.astro';
 </div>
 <div style="background:#fff;border-radius:24px;box-shadow:0 10px 30px rgba(26,18,32,.08);padding:32px;display:flex;flex-direction:column;gap:20px">
 
-<form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thanks/" style="display:flex;flex-direction:column;gap:18px">
+<form id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thanks/" data-hs-portal={hubspot.portalId} data-hs-form={hubspot.formId} style="display:flex;flex-direction:column;gap:18px">
 <input type="hidden" name="form-name" value="contact">
 <p hidden><label>Don’t fill this out: <input name="bot-field"></label></p>
+<input type="hidden" name="request_type" value="">
+<input type="hidden" name="program" value="">
+<input type="hidden" name="session" value="">
 <div style="display:flex;flex-direction:column;gap:6px"><h2 style="margin:0;font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:32px;color:#1A1220">Send a message</h2></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px"><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Name<input name="name" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Email<input type="email" name="email" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label></div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px"><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Learner grade(s)<input name="grades" placeholder="e.g. 2nd and 6th" style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label>
-<label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Schooling setup<select name="schooling" style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"><option>Homeschool</option><option>Public school</option><option>Private school</option><option>Hybrid / in between</option><option>School or co-op (workshops)</option></select></label></div>
-<label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">I'm interested in<select name="interest" style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"><option>Not sure yet</option><option>Private tutoring</option><option>Small-group classes</option><option>Enrichment</option><option>Learning assessment</option><option>Homeschool consulting / planning</option><option>Parent coaching</option><option>Workshops for schools &amp; co-ops</option></select></label>
-<fieldset style="border:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px"><legend style="font-weight:700;font-size:14px;margin-bottom:10px">How do you plan to pay?</legend><div style="display:flex;flex-wrap:wrap;gap:10px"><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Out of pocket" style="accent-color:#E8359A">Out of pocket</label><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="ESA" style="accent-color:#E8359A">Florida ESA</label><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Scholarship" style="accent-color:#E8359A">Scholarship</label><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Not sure" style="accent-color:#E8359A">Not sure</label></div></fieldset>
+<p id="context" hidden style="margin:0;background:#FFF8DC;border-radius:12px;padding:12px 16px;font-weight:700;font-size:15px;color:#1A1220"></p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px"><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">First name<input name="firstname" autocomplete="given-name" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Last name<input name="lastname" autocomplete="family-name" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px"><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Email<input type="email" name="email" autocomplete="email" required style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Learner grade(s)<input name="grades" placeholder="e.g. 2nd and 6th" style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"></label></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px"><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Schooling setup<select name="schooling_setup" style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"><option>Homeschool</option><option>Public school</option><option>Private school</option><option>Hybrid / in between</option><option>School or co-op (workshops)</option></select></label><label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">I'm interested in<select name="interest" style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220"><option>Not sure yet</option><option>Annual homeschool evaluation</option><option>Private tutoring</option><option>Small-group classes</option><option>Learning assessment</option><option>Homeschool consulting / planning</option><option>Parent coaching</option><option>Workshops for schools &amp; co-ops</option></select></label></div>
+<fieldset style="border:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px"><legend style="font-weight:700;font-size:14px;margin-bottom:10px">How do you plan to pay?</legend><div style="display:flex;flex-wrap:wrap;gap:10px"><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Out of pocket" style="accent-color:#E8359A">Out of pocket</label><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Step Up scholarship (FES-UA, FES-EO, or PEP)" style="accent-color:#E8359A">Step Up scholarship (FES-UA, FES-EO, or PEP)</label><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Other scholarship or ESA" style="accent-color:#E8359A">Other scholarship or ESA</label><label style="display:flex;align-items:center;gap:8px;border:2px solid #1A1220;border-radius:999px;padding:8px 14px;font-size:14px;cursor:pointer"><input type="radio" name="funding" value="Not sure" style="accent-color:#E8359A">Not sure</label></div></fieldset>
 <label style="display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:14px;color:#1A1220">Message<textarea name="message" rows="5" placeholder="Tell us a bit about your family and what you're looking for." style="padding:13px 14px;border:2px solid #1A1220;border-radius:12px;background:#FDFAF6;font-size:16px;font-weight:400;color:#1A1220;resize:vertical"></textarea></label>
+<p id="form-error" role="alert" hidden style="margin:0;color:#B8246F;font-weight:700;font-size:15px">Something went wrong sending that. Please try again in a moment.</p>
 <button type="submit" style="background:#E8359A;color:#FDFAF6;border:none;padding:16px 28px;border-radius:999px;font-weight:700;font-size:16px;cursor:pointer" data-h="10">Send message</button>
 </form>
 
@@ -39,4 +44,83 @@ import Layout from '../layouts/Layout.astro';
 <div style="border-top:4px solid #0BBFB0;padding-top:18px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Fraunces',serif;font-style:italic;font-weight:800;font-size:28px;color:#1A1220">04</span><h3 style="margin:0;font-family:'Fraunces',serif;font-weight:700;font-size:21px;color:#1A1220">Start learning</h3><p style="margin:0;font-size:15px;line-height:1.55;color:#4A3F4E">Book directly, or pre-purchase with your ESA.</p></div>
 </div>
 </section>
+<script is:inline>
+  (function () {
+    var form = document.getElementById('contact-form');
+    var params = new URLSearchParams(location.search);
+    var clean = function (v) { return (v || '').slice(0, 200); };
+    var types = {
+      'waitlist': 'Join the waitlist',
+      'sign-up-with-feedback': 'Sign up with feedback',
+      'sign-up-without-feedback': 'Sign up without feedback',
+      'request-a-time': 'Request a time',
+      'inquiry': 'Inquiry',
+      'webinar': 'Webinar registration'
+    };
+    var label = types[params.get('type')] || '';
+    var program = clean(params.get('program'));
+    var session = clean(params.get('session'));
+    var interest = params.get('interest');
+
+    // Prefill from the link the visitor came in on.
+    form.elements.request_type.value = label || 'General message';
+    form.elements.program.value = program;
+    form.elements.session.value = session;
+    if (interest) {
+      var opts = form.elements.interest.options;
+      for (var i = 0; i < opts.length; i++) {
+        if (opts[i].value === interest) form.elements.interest.value = interest;
+      }
+    }
+    if (label) {
+      var ctx = document.getElementById('context');
+      ctx.textContent = label + (program ? ': ' + program : '') + (session ? ' (' + session + ')' : '');
+      ctx.hidden = false;
+    }
+
+    var hubspotFields = ['firstname', 'lastname', 'email', 'grades', 'schooling_setup', 'interest', 'funding', 'message', 'request_type', 'program', 'session'];
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (form.elements['bot-field'].value) return;
+      var btn = form.querySelector('button[type=submit]');
+      var err = document.getElementById('form-error');
+      err.hidden = true;
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      var fields = [];
+      hubspotFields.forEach(function (n) {
+        var el = form.elements[n];
+        var v = el && el.value ? el.value.trim() : '';
+        if (v) fields.push({ name: n, value: v });
+      });
+      var hutk = (document.cookie.match(/(?:^|; )hubspotutk=([^;]+)/) || [])[1];
+      var context = { pageUri: location.href, pageName: document.title };
+      if (hutk) context.hutk = hutk;
+
+      var toHubspot = fetch('https://api.hsforms.com/submissions/v3/integration/submit/' + form.dataset.hsPortal + '/' + form.dataset.hsForm, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: fields, context: context })
+      }).then(function (r) { if (!r.ok) throw new Error('hubspot ' + r.status); });
+
+      // Netlify Forms keeps a backup copy of every submission.
+      var toNetlify = fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(form)).toString()
+      }).then(function (r) { if (!r.ok) throw new Error('netlify ' + r.status); });
+
+      Promise.allSettled([toHubspot, toNetlify]).then(function (res) {
+        if (res[0].status === 'fulfilled' || res[1].status === 'fulfilled') {
+          location.href = '/thanks/';
+        } else {
+          err.hidden = false;
+          btn.disabled = false;
+          btn.textContent = 'Send message';
+        }
+      });
+    });
+  })();
+</script>
 </Layout>
