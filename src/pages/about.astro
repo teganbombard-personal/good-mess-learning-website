@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import tegan from '../assets/photos/about-tegan.jpg';
+import family from '../assets/photos/about-family-project.jpg';
 ---
 <Layout title="About | Good Mess Learning" active="about">
 <header style="position:relative;padding:56px 56px 88px;display:flex;flex-direction:column;gap:22px">
@@ -36,8 +39,8 @@ import Layout from '../layouts/Layout.astro';
 </div></div></section>
 <section style="padding:112px 56px 96px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:56px;align-items:center">
 <div style="position:relative;height:460px">
-<div style="position:absolute;left:0;top:20px;width:300px;height:370px;background:#fff;padding:14px 14px 56px;box-shadow:0 10px 30px rgba(26,18,32,.12);transform:rotate(-5deg)"><div style="width:100%;height:100%;background:repeating-linear-gradient(135deg,#F1E7EE 0 12px,#FDFAF6 12px 24px);display:flex;align-items:center;justify-content:center;font:11px ui-monospace,Menlo,monospace;color:#7A6D7E">photo: Tegan</div></div>
-<div style="position:absolute;left:210px;top:70px;width:270px;height:330px;background:#fff;padding:14px 14px 56px;box-shadow:0 10px 30px rgba(26,18,32,.12);transform:rotate(4deg)"><div style="width:100%;height:100%;background:repeating-linear-gradient(135deg,#DDF3F1 0 12px,#FDFAF6 12px 24px);display:flex;align-items:center;justify-content:center;font:11px ui-monospace,Menlo,monospace;color:#5E7472">photo: family project day</div></div>
+<div style="position:absolute;left:0;top:20px;width:300px;height:370px;background:#fff;padding:14px 14px 56px;box-shadow:0 10px 30px rgba(26,18,32,.12);transform:rotate(-5deg)"><Image src={tegan} alt="Tegan in a classroom wearing a handmade Magic School Bus costume" widths={[480, 720, 960]} sizes="(min-width: 768px) 300px, 90vw" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 20%" /></div>
+<div style="position:absolute;left:210px;top:70px;width:270px;height:330px;background:#fff;padding:14px 14px 56px;box-shadow:0 10px 30px rgba(26,18,32,.12);transform:rotate(4deg)"><Image src={family} alt="Hands holding a papier-mâché globe painted blue and green" widths={[480, 720, 960]} sizes="(min-width: 768px) 300px, 90vw" loading="lazy" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%" /></div>
 </div>
 <div style="display:flex;flex-direction:column;gap:18px">
 <div style="font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#B8246F">Meet the founder</div>
