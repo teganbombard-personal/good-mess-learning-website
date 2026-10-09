@@ -15,3 +15,5 @@ export const contactLink = ({ type, program, session, interest }: Ctx) => {
   if (interest) q.set('interest', interest);
   return `/contact/?${q.toString()}`;
 };
+
+export const facebookUrl = 'https://www.facebook.com/profile.php?id=61577531156589';

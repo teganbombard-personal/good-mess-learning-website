@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/hover.css';
+import { facebookUrl } from '../config';
 
 interface Props {
   title: string;
@@ -29,31 +30,33 @@ const links = [
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..900,0..100;1,9..144,400..900,0..100&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div style="max-width:1280px;margin:0 auto;overflow:hidden">
-      <nav style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:24px 56px">
-        <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none">
-          <img src="/images/logo-goodmess.png" alt="" style="width:56px;height:56px;transform:rotate(-8deg)" />
-          <span style="font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:22px;color:#1A1220">Good Mess Learning</span>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Main">
+        <a href="/" class="brand">
+          <img src="/images/logo-goodmess.png" alt="" />
+          <span class="brand-text">Good Mess Learning</span>
         </a>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px;box-shadow:0 2px 10px rgba(26,18,32,.08);font-weight:600;font-size:15px">
+        <div class="nav-pill">
           {links.map((l) => (
             <a href={l.href} class="nav-link" style={`--hover:${l.hover}`} aria-current={active === l.key ? 'page' : undefined}>{l.label}</a>
           ))}
           <a href="/contact/" class="nav-cta">Book a call</a>
         </div>
       </nav>
+    </header>
+    <div style="max-width:1280px;margin:0 auto;overflow:hidden">
 
       <slot />
 
       <footer style="padding:0 56px 40px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;font-size:15px">
-        <span style="color:#4A3F4E;font-size:14px">© 2026 Good Mess Learning · <a href="mailto:tegan@goodmesslearning.com" style="color:#4A3F4E">tegan@goodmesslearning.com</a> · Central Florida</span>
+        <span style="color:#4A3F4E;font-size:14px">© 2026 Good Mess Learning · Central Florida</span>
         <div style="display:flex;flex-wrap:wrap;gap:24px">
           <a class="foot-link" href="/about/">About</a>
           <a class="foot-link" href="/services/">Services</a>
           <a class="foot-link" href="/programs/">Programs</a>
           <a class="foot-link" href="/pricing/">Pricing</a>
           <a class="foot-link" href="/contact/">Contact</a>
-          <a class="foot-link" href="https://www.facebook.com">Facebook</a>
+          <a class="foot-link" href={facebookUrl} target="_blank" rel="noopener noreferrer">Facebook</a>
         </div>
       </footer>
     </div>
