@@ -29,7 +29,7 @@ input,select,textarea,button{font-family:inherit}
 
 /* keyboard focus */
 a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #1A1220;outline-offset:3px}
-[id]{scroll-margin-top:24px}
+[id]{scroll-margin-top:var(--anchor-offset)}
 
 /* programs: session chips */
 .session{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 16px;border:2px solid #1A1220;border-radius:16px;padding:12px 16px;text-decoration:none;color:#1A1220;background:#FDFAF6;transition:transform .15s ease,background .15s ease}
@@ -44,3 +44,24 @@ a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,s
 
 .sessions{display:grid;grid-template-columns:1fr;gap:10px}
 @media (min-width:700px){.sessions{grid-template-columns:repeat(2,1fr)}}
+
+/* sticky header */
+:root{--anchor-offset:100px}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(253,250,246,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(26,18,32,.06)}
+.site-nav{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 56px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:48px;height:48px;transform:rotate(-8deg)}
+.brand-text{font-family:'Fraunces',serif;font-variation-settings:'SOFT' 100;font-weight:800;font-size:22px;color:#1A1220}
+.nav-pill{display:flex;flex-wrap:wrap;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:6px;box-shadow:0 2px 10px rgba(26,18,32,.08);font-weight:600;font-size:15px}
+@media (max-width:700px){
+  :root{--anchor-offset:110px}
+  .site-nav{padding:6px 12px;gap:6px}
+  .brand{gap:8px}
+  .brand img{width:34px;height:34px}
+  .brand-text{font-size:17px}
+  .nav-pill{font-size:13px;padding:3px;gap:0;max-width:100%}
+  .nav-link{padding:6px 7px}
+  .nav-cta{padding:6px 11px}
+}
