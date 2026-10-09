@@ -55,7 +55,7 @@ import { hubspot } from '../config';
     var types = {
       'waitlist': 'Join the waitlist',
       'sign-up-with-feedback': 'Sign up with feedback',
-      'sign-up-without-feedback': 'Sign up without feedback',
+      'sign-up-self-guided': 'Sign up self-guided',
       'request-a-time': 'Request a time',
       'inquiry': 'Inquiry',
       'webinar': 'Webinar registration'
@@ -94,6 +94,7 @@ import { hubspot } from '../config';
       }
       title.style.fontSize = 'clamp(40px, 5.5vw, 72px)';
       document.getElementById('page-lede').textContent = 'Add your details and we’ll let you know when a spot opens.';
+      form.elements.message.placeholder = 'Which days and times work best for your family?';
       document.querySelectorAll('[data-sticker]').forEach(function (el) { el.style.display = 'none'; });
       var grid = document.getElementById('contact-grid');
       grid.insertBefore(document.getElementById('form-card'), grid.firstChild);
